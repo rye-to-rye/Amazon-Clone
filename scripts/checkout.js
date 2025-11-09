@@ -1,6 +1,6 @@
 import {cart} from '../data/cart.js';
 import {products} from '../data/products.js'
-
+import {formatCurrency} from '../scripts/utils/money.js'
 
 
 
@@ -32,7 +32,7 @@ cart.forEach((item) => {
                   ${itemName}
                 </div>
                 <div class="product-price">
-                  $${(itemPrice * item.quantity) / 100}
+                  $${(formatCurrency(itemPrice) * item.quantity).toFixed(2)}
                 </div>
                 <div class="product-quantity">
                   <span>
@@ -54,7 +54,7 @@ cart.forEach((item) => {
                 <div class="delivery-option">
                   <input type="radio" checked
                     class="delivery-option-input"
-                    name="delivery-option-1">
+                    name="delivery-option-${item.productId}">
                   <div>
                     <div class="delivery-option-date">
                       Tuesday, June 21
@@ -67,7 +67,7 @@ cart.forEach((item) => {
                 <div class="delivery-option">
                   <input type="radio"
                     class="delivery-option-input"
-                    name="delivery-option-1">
+                    name="delivery-option-${item.productId}">
                   <div>
                     <div class="delivery-option-date">
                       Wednesday, June 15
@@ -80,7 +80,7 @@ cart.forEach((item) => {
                 <div class="delivery-option">
                   <input type="radio"
                     class="delivery-option-input"
-                    name="delivery-option-1">
+                    name="delivery-option-${item.productId}">
                   <div>
                     <div class="delivery-option-date">
                       Monday, June 13
@@ -92,8 +92,7 @@ cart.forEach((item) => {
                 </div>
               </div>
             </div>
-          </div>`
-
+          </div>` 
 });
 console.log(cart);
 document.querySelector('.order-summary').innerHTML = ordersHTML;
