@@ -1,4 +1,4 @@
-import {cart, removeFromCart} from '../data/cart.js';
+import {cart, removeFromCart, updateDeliveryOption} from '../data/cart.js';
 import {products} from '../data/products.js';
 import {formatCurrency} from '../scripts/utils/money.js';
 import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
@@ -101,7 +101,9 @@ function deliveryOptionsHTML(item) {
       deliveryOption.id === item.deliveryOptionId;
 
     html += `
-      <div class="delivery-option">
+      <div class="delivery-option js-delivery-option"
+        data-product-id="${item.productId}"
+        data-delivery-option-id="${deliveryOption.id}">
         <input type="radio"
           class="delivery-option-input"
           name="delivery-option-${item.productId}"
@@ -117,6 +119,7 @@ function deliveryOptionsHTML(item) {
         </div>
       </div>
     `;
+
   });
 
   return html;
@@ -134,5 +137,13 @@ document.querySelectorAll('.js-delete-link').forEach((link) => {
     );
 
     container.remove();
+  });
+});
+
+
+document.querySelectorAll('.js-delivery-option').forEach((element) => {
+  element.addEventListener('click', () => {
+    const {productId, deliveryOptionId} = element.dataset;
+    updateDeliveryOption(productId, deliveryOptionId);
   });
 });
