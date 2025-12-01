@@ -5,6 +5,16 @@ if (!cart) {
   cart = [];
 }
 
+
+export function getCartQuantity(){
+  let cartQuantity = 0;
+  cart.forEach((item) => {
+    cartQuantity += item.quantity
+  });
+  return cartQuantity;
+}
+
+
 function saveToStorage(){
   localStorage.setItem('cart', JSON.stringify(cart))
 }
@@ -21,7 +31,8 @@ export function addToCart(productId){
     }else{
       cart.push({
         productId: productId,
-        quantity: 1
+        quantity: 1,
+        deliveryOptionId: '1'
       });
     }
 
