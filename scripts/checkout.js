@@ -1,4 +1,4 @@
-import {cart, removeFromCart, updateDeliveryOption} from '../data/cart.js';
+import {cart, removeFromCart, updateDeliveryOption, getCartQuantity, getCartTotalPrice, getTotalShippingAndHandling} from '../data/cart.js';
 import {products} from '../data/products.js';
 import {formatCurrency} from '../scripts/utils/money.js';
 import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
@@ -7,7 +7,7 @@ import {deliveryOptions} from '../data/deliveryOptions.js';
 
 hello();
 
-function renderOrderSummary(){
+function renderCheckoutSummary(){
   let ordersHTML = ``;
 
   cart.forEach((item) => {
@@ -138,6 +138,7 @@ function renderOrderSummary(){
       );
 
       container.remove();
+      renderCheckoutSummary();
     });
   });
 
@@ -146,9 +147,62 @@ function renderOrderSummary(){
     element.addEventListener('click', () => {
       const {productId, deliveryOptionId} = element.dataset;
       updateDeliveryOption(productId, deliveryOptionId);
-      renderOrderSummary();
+      renderCheckoutSummary();
     });
   });
+
+  let orderSummaryHTML = `
+            <div class="payment-summary-title">
+            Order Summary
+          </div>
+
+          <div class="payment-summary-row">
+            <div>Items (${getCartQuantity()}):</div>
+            <div class="payment-summary-money">$${(getCartTotalPrice() / 100).toFixed(2)}</div>
+          </div>
+
+          <div class="payment-summary-row">
+            <div>Shipping &amp; handling:</div>
+            <div class="payment-summary-money">$${(getTotalShippingAndHandling() / 100).toFixed(2)}</div>
+          </div>
+
+          <div class="payment-summary-row subtotal-row">
+            <div>Total before tax:</div>
+            <div class="payment-summary-money">$${((getCartTotalPrice() + getTotalShippingAndHandling()) / 100).toFixed(2)}</div>
+          </div>
+
+          <div class="payment-summary-row">
+            <div>Estimated tax (10%):</div>
+            <div class="payment-summary-money">$${(((getCartTotalPrice() + getTotalShippingAndHandling()) * .10) / 100).toFixed(2)}</div>
+          </div>
+
+          <div class="payment-summary-row total-row">
+            <div>Order total:</div>
+            <div class="payment-summary-money">$${((((getCartTotalPrice() + getTotalShippingAndHandling())) + ((getCartTotalPrice() + getTotalShippingAndHandling()) * .10)) / 100).toFixed(2)}</div>
+          </div>
+
+          <button class="place-order-button button-primary">
+            Place your order
+          </button>
+  `;
+
+  document.querySelector('.payment-summary').innerHTML = orderSummaryHTML;
+
+  document.querySelector('.return-to-home-link').innerHTML = `${getCartQuantity()} items`;
+
+
+if(cart.length === 0){
+  document.querySelector('.order-summary').innerHTML = `
+    <p>Your cart is empty.</p>
+    <a class="button-primary" href="amazon.html">
+      View products
+    </a>
+  `;
 }
 
-renderOrderSummary();
+
+
+  
+}
+
+renderCheckoutSummary();

@@ -1,4 +1,4 @@
-
+import {products} from './products.js';
 
 export let cart = JSON.parse(localStorage.getItem('cart'));
 if (!cart) {
@@ -12,6 +12,28 @@ export function getCartQuantity(){
     cartQuantity += item.quantity
   });
   return cartQuantity;
+}
+
+function getItemPrice(productId) {
+  for (let product of products) {
+    if (product.id === productId) {
+      return product.priceCents;
+    }
+  }
+  return 0; // fallback
+}
+
+
+export function getCartTotalPrice(){
+  let cartTotalPrice = 0;
+
+  cart.forEach((item) => {
+    cartTotalPrice += item.quantity * getItemPrice(item.productId);
+  });
+  
+  //console.log(cartTotalPrice);
+
+  return cartTotalPrice;
 }
 
 
@@ -63,4 +85,16 @@ export function updateDeliveryOption(productId, deliveryOptionId) {
   matchingItem.deliveryOptionId = deliveryOptionId;
 
   saveToStorage();
+}
+
+export function getTotalShippingAndHandling(){
+  let totalShippingAndHandling = 0;
+  cart.forEach((item) => {
+    if (item.deliveryOptionId === '2'){
+      totalShippingAndHandling += 499;
+    } else if (item.deliveryOptionId === '3'){
+      totalShippingAndHandling += 999
+    }
+  });
+  return totalShippingAndHandling;
 }
