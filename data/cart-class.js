@@ -3,7 +3,7 @@ class Cart {
   #localStorageKey;
 
   constructor(localStorageKey) {
-    cart.#localStorageKey = localStorageKey;
+    this.#localStorageKey = localStorageKey;
     this.#loadFromStorage();
   }
 
