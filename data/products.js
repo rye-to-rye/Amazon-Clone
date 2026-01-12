@@ -48,6 +48,7 @@ class Clothing extends Product {
     this.sizeChartLink = productDetails.sizeChartLink;
   }
 
+
   extraInfoHTML() {
     // super.extraInfoHTML();
     return `
@@ -56,6 +57,7 @@ class Clothing extends Product {
       </a>
     `;
   }
+
 }
 
 /*
